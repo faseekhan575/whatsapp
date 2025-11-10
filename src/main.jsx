@@ -6,6 +6,7 @@ import { RouterProvider } from 'react-router-dom'
 import Signup from './signup/Signup'
 import Login from './logins/Login'
 import UserCollect from './collection/Usercollect'
+import Chats from './chats/Chats'
 import { Provider } from 'react-redux'
 import store from './store/store'
 import { Toaster } from 'react-hot-toast';
