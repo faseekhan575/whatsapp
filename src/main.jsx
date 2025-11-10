@@ -10,7 +10,7 @@ import Chats from './chats/Chats'
 import { Provider } from 'react-redux'
 import store from './store/store'
 import { Toaster } from 'react-hot-toast';
-import SimpleMessagePopup from './collection/popup'
+import SimpleMessagePopup from './collection/Popup'
 
 const router = createBrowserRouter([
 
