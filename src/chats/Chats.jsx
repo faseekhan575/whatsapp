@@ -254,7 +254,7 @@ function Chats() {
                     <div key={msg.$id || idx} className={`flex ${isSender ? "justify-end" : "justify-start"}`}>
                       <div className={`p-3 rounded-2xl shadow-md max-w-xs break-words relative ${isSender ? "bg-gradient-to-r from-[#dcf8c6] to-[#b2f2bb]" : "bg-white dark:bg-gray-700"}`}>
                         <p className="text-sm leading-snug">{msg.text}</p>
-                        <p className="text-[10px] text-gray-500 mt-1 text-right">
+                        <p className="text-[10px] text-white mt-1 text-right">
                           {new Date(msg.timespan).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </p>
                       </div>
