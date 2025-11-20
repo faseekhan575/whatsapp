@@ -7,10 +7,12 @@ import toast from "react-hot-toast";
 function Signup() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // <-- Added for signup loading state
   const navigate = useNavigate();
 
   const handleSignup = async (data) => {
     setError("");
+    setLoading(true); // Start loading
     try {
       const signup = await Appwrite.register({
         fullname: data.name,
@@ -29,32 +31,24 @@ function Signup() {
       if (!user) throw new Error("Login failed");
       console.log("Login success", user);
       toast.success("Signup Successful!");
+
       setTimeout(() => {
         navigate("/RTC");
-      }, 3000);
+      }, 2000);
     } catch (err) {
       console.error(err);
-      toast.error("Signup Failed! plz try to logout first");
-      navigate("/login");
+      toast.error("Signup Failed! Please try logging out first.");
       setError(err.message || "Something went wrong");
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await Appwrite.logout();
-      console.log("User logged out");
       navigate("/login");
-    } catch (err) {
-      console.error("Logout failed:", err);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* LEFT SIDE — WhatsApp Green Brand Area */}
+      {/* LEFT SIDE — Brand Area */}
       <div className="md:w-1/2 w-full bg-[#075E54] flex flex-col items-center justify-center text-white p-6 md:p-10 relative">
-        {/* Official WhatsApp Logo */}
         <div className="absolute top-6 left-6 flex items-center space-x-2">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
@@ -81,14 +75,6 @@ function Signup() {
 
       {/* RIGHT SIDE — Signup Form */}
       <div className="md:w-1/2 w-full bg-[#0B141A] flex items-center justify-center p-6 md:p-10 relative">
-        {/* Logout Button */}
-        {/* <button
-          onClick={handleLogout}
-          className="absolute top-4 right-4 text-white bg-red-600 hover:bg-red-700 font-semibold px-4 py-1.5 rounded-lg shadow-md text-sm md:text-base transition-all"
-        >
-          Logout
-        </button> */}
-
         <form
           onSubmit={handleSubmit(handleSignup)}
           className="bg-[#1C2733] p-6 md:p-10 rounded-2xl shadow-2xl w-full max-w-md flex flex-col gap-5"
@@ -143,8 +129,8 @@ function Signup() {
             {...register("password", {
               required: "Password is required",
               minLength: {
-                value: 6,
-                message: "Password must be at least 6 characters",
+                value: 8,
+                message: "Password must be at least 8 characters",
               },
             })}
             className="p-3 rounded-lg bg-white/10 border border-gray-600 focus:border-[#25D366] outline-none text-white w-full text-sm md:text-base"
@@ -156,9 +142,11 @@ function Signup() {
           {/* Signup Button */}
           <button
             type="submit"
-            className="p-3 rounded-full bg-[#25D366] hover:bg-[#20b358] transition-all text-white font-bold shadow-md hover:shadow-lg text-sm md:text-base"
+            disabled={loading}
+            className={`p-3 rounded-full transition-all text-white font-bold shadow-md hover:shadow-lg text-sm md:text-base 
+              ${loading ? "bg-gray-500 cursor-not-allowed" : "bg-[#25D366] hover:bg-[#20b358]"}`}
           >
-            Sign Up
+            {loading ? "Signing Up..." : "Sign Up"}
           </button>
 
           {/* Error Message */}

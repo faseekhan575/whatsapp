@@ -2,20 +2,23 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Appwrite from "../appwrite/Appwrite";
 import { useNavigate, Link } from "react-router-dom";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // ✅ Added loading state
   const navigate = useNavigate();
 
   const handleLogin = async (data) => {
     setError("");
+    setLoading(true); // ✅ Start loading
     try {
       const Logins = await Appwrite.login({
         email: data.email,
         password: data.password,
       });
+
       if (Logins) {
         const userdata = await Appwrite.currentuser();
         if (userdata) {
@@ -24,14 +27,14 @@ function Login() {
           setTimeout(() => {
             navigate("/home");
           }, 3000);
-          
         } else throw new Error("User fetch failed");
       }
     } catch (err) {
       toast.error("LOGIN FAILED PLZ LOGOUT FIRST!");
-      
       console.error(err);
       setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false); // ✅ Stop loading after success or fail
     }
   };
 
@@ -49,7 +52,7 @@ function Login() {
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* LEFT SIDE — WhatsApp Green Theme Area */}
       <div className="md:w-1/2 w-full bg-[#075E54] flex flex-col items-center justify-center text-white p-6 md:p-10 relative">
-        {/* Official WhatsApp Logo + Branding */}
+        {/* Logo + Branding */}
         <div className="absolute top-6 left-6 flex items-center space-x-2">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
@@ -124,15 +127,18 @@ function Login() {
           {/* Login Button */}
           <button
             type="submit"
-            className="p-3 rounded-full bg-[#25D366] hover:bg-[#20b358] transition-all text-white font-bold shadow-md hover:shadow-lg text-sm md:text-base"
+            disabled={loading}
+            className={`p-3 rounded-full transition-all text-white font-bold shadow-md hover:shadow-lg text-sm md:text-base 
+              ${loading ? "bg-gray-500 cursor-not-allowed" : "bg-[#25D366] hover:bg-[#20b358]"}`}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
 
-          {/* Logout Button Below Login */}
+          {/* Logout Button */}
           <button
             type="button"
             onClick={handleLogout}
+            disabled={loading}
             className="p-3 rounded-full bg-red-600 hover:bg-red-700 transition-all text-white font-bold shadow-md hover:shadow-lg text-sm md:text-base"
           >
             Logout

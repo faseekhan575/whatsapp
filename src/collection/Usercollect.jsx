@@ -17,48 +17,43 @@ function UserCollect() {
   const [preview, setPreview] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [mydata, setMydata] = useState(null);
-  
+  const [loading, setLoading] = useState(false); // ✅ Added loading state
   const dispatch = useDispatch();
 
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setPreview(previewUrl);
 
-const handleFileChange = async (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    setSelectedFile(file);
-    const previewUrl = URL.createObjectURL(file);
-    setPreview(previewUrl);
+      try {
+        const uploaded = await Appwrite.getfile(file);
+        console.log("Uploaded file:", uploaded);
 
-    try {
-      
-      const uploaded = await Appwrite.getfile(file);
-      console.log("Uploaded file:", uploaded);
+        const fileId = uploaded.$id;
+        const bucketId = uploaded.bucketId;
 
-    
-      const fileId = uploaded.$id;
-      const bucketId = uploaded.bucketId;
+        localStorage.setItem("lastFileId", fileId);
 
-   
-      localStorage.setItem("lastFileId", fileId);
-
-
-      const fileUrl = `${Appwrite.client.config.endpoint}/storage/buckets/${bucketId}/files/${fileId}/view?project=${Appwrite.client.config.project}`;
+        const fileUrl = `${Appwrite.client.config.endpoint}/storage/buckets/${bucketId}/files/${fileId}/view?project=${Appwrite.client.config.project}`;
         setMydata(fileUrl);
-  
-      dispatch(imageurl(uploaded.$id));
-      console.log("Image URL dispatched:", fileUrl);
-    } catch (error) {
-      console.error("Error uploading file:", error);
+
+        dispatch(imageurl(uploaded.$id));
+        console.log("Image URL dispatched:", fileUrl);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        dispatch(imageurl(null));
+      }
+    } else {
+      setSelectedFile(null);
+      setPreview(null);
       dispatch(imageurl(null));
     }
-  } else {
-    setSelectedFile(null);
-    setPreview(null);
-    dispatch(imageurl(null));
-  }
-};
-
+  };
 
   const handlecollect = async (data) => {
+    setLoading(true); // ✅ Start loading
     try {
       if (!selectedFile) {
         throw new Error("Please upload a profile picture");
@@ -77,19 +72,19 @@ const handleFileChange = async (e) => {
 
       dispatch(name(data.username));
       dispatch(userid(currentUser.$id));
-      
 
-     console.log("User data created:", data.username);
-     console.log("Current user ID:", currentUser.$id);
-    console.log("Image URL:letsssssssssss", mydata);
+      console.log("User data created:", data.username);
+      console.log("Current user ID:", currentUser.$id);
+      console.log("Image URL:letsssssssssss", mydata);
 
       navigate("/home");
     } catch (error) {
       console.error(error);
       alert(error.message);
+    } finally {
+      setLoading(false); // ✅ Stop loading when done
     }
   };
-
 
   return (
     <div
@@ -177,9 +172,11 @@ const handleFileChange = async (e) => {
           {/* Continue Button */}
           <button
             type="submit"
-            className="w-full bg-[#25D366] hover:bg-[#1ebe5c] text-white font-semibold py-2 rounded-full shadow-lg transition-all duration-200 active:scale-95"
+            disabled={loading}
+            className={`w-full text-white font-semibold py-2 rounded-full shadow-lg transition-all duration-200 active:scale-95
+              ${loading ? "bg-gray-500 cursor-not-allowed" : "bg-[#25D366] hover:bg-[#1ebe5c]"}`}
           >
-            Continue
+            {loading ? "Continuing..." : "Continue"}
           </button>
         </form>
 
@@ -187,7 +184,6 @@ const handleFileChange = async (e) => {
         <div className="flex-1 flex justify-center mt-10 md:mt-0 md:justify-end">
           <div className="relative">
             <div className="bg-white/10 rounded-full p-8 md:p-12 shadow-2xl">
-              {/* You can replace emoji with your real logo src later */}
               <span className="text-white text-6xl md:text-8xl">💬</span>
             </div>
           </div>
