@@ -113,7 +113,7 @@ function UserCollect() {
               <img
                 src={preview}
                 alt="Preview"
-                className="h-24 w-24 rounded-full object-cover border-4 border-white shadow-md mb-3"
+                className="h-24 w-24 rounded-full  object-cover border-4 border-white shadow-md mb-3"
               />
             ) : (
               <div className="h-24 w-24 rounded-full bg-white/30 flex items-center justify-center text-white mb-3">

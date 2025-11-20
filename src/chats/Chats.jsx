@@ -177,7 +177,7 @@ function Chats() {
           <input
             type="text"
             placeholder="Search or start new chat"
-            className="w-full px-3 py-2 rounded-full bg-white text-sm focus:outline-none border border-gray-300"
+            className="w-full px-3 py-2 rounded-full bg-white  text-sm focus:outline-none border border-gray-300"
           />
         </div>
 
