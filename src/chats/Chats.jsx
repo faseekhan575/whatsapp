@@ -112,7 +112,7 @@ function Chats() {
     if (selectedUser) currentuserss();
   }, [selectedUser, messages]);
 
- 
+
 
   const showimage = async () => {
     try {
@@ -133,7 +133,7 @@ function Chats() {
     showimage();
   }, [newname]);
 
- const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
       await Appwrite.logout();
       console.log("User logged out");
@@ -151,22 +151,22 @@ function Chats() {
         {/* Header */}
         <div className="flex items-center justify-between p-3 bg-[#075E54] text-white">
           <div className="flex items-center gap-2">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" className="w-7 h-7"/>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" className="w-7 h-7" />
             <span className="font-semibold text-lg">WhatsApp</span>
           </div>
           <div className="flex items-center gap-4 text-xl">
-            <Clock size={20} className="hover:text-gray-200"/>
-            <Send size={20} className="hover:text-gray-200"/>
-            <MoreVertical size={20} className="hover:text-gray-200"/>
+            <Clock size={20} className="hover:text-gray-200" />
+            <Send size={20} className="hover:text-gray-200" />
+            <MoreVertical size={20} className="hover:text-gray-200" />
             {/* Profile image always visible */}
             <div
               onClick={() => setShowProfile(true)}
               className="w-10 h-10 rounded-full bg-gray-200 cursor-pointer flex items-center justify-center overflow-hidden"
             >
               {newimage ? (
-                <img src={newimage} alt="Profile" className="w-full h-full object-cover"/>
+                <img src={newimage} alt="Profile" className="w-full h-full object-cover" />
               ) : (
-                <User size={20} className="text-gray-600"/>
+                <User size={20} className="text-gray-600" />
               )}
             </div>
           </div>
@@ -189,7 +189,7 @@ function Chats() {
               onClick={() => setSelectedUser(user)}
               className="flex items-center gap-3 p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-200 transition"
             >
-              <img src={user.userImage || "https://via.placeholder.com/50"} alt={user.userName || "Unknown User"} className="w-12 h-12 rounded-full object-cover"/>
+              <img src={user.userImage || "https://via.placeholder.com/50"} alt={user.userName || "Unknown User"} className="w-12 h-12 rounded-full object-cover" />
               <div className="flex-1">
                 <div className="font-semibold">{user.userName || "Unnamed User"}</div>
                 <div className="text-sm text-gray-500">Tap to chat</div>
@@ -207,7 +207,7 @@ function Chats() {
             <div className="flex items-center justify-between gap-3 p-3 bg-[#075E54] text-white relative">
               <div className="flex items-center gap-3">
                 <button className="md:hidden text-white" onClick={() => setSelectedUser(null)}>←</button>
-                <img src={selectedUser.userImage || "https://via.placeholder.com/40"} alt={selectedUser.userName || "Unknown"} className="w-10 h-10 rounded-full object-cover"/>
+                <img src={selectedUser.userImage || "https://via.placeholder.com/40"} alt={selectedUser.userName || "Unknown"} className="w-10 h-10 rounded-full object-cover" />
                 <div>
                   <div className="font-semibold">{selectedUser.userName}</div>
                   <div className="text-xs text-gray-200">online</div>
@@ -235,7 +235,7 @@ function Chats() {
                       This is your WhatsApp profile. You can see your username, profile picture, and manage your account permissions here.
                     </p>
                     <button
-                      onClick={() => {handleLogout()}}
+                      onClick={() => { handleLogout() }}
                       className="mt-4 w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg"
                     >
                       Logout
@@ -252,7 +252,7 @@ function Chats() {
                   const isSender = msg.senderid === currentUserId;
                   return (
                     <div key={msg.$id || idx} className={`flex ${isSender ? "justify-end" : "justify-start"}`}>
-                      <div className={`p-3 rounded-2xl shadow-md max-w-xs break-words relative ${isSender ? "bg-gradient-to-r from-[#dcf8c6] to-[#b2f2bb]" : "bg-white dark:bg-gray-700"}`}>
+                      <div className={`p-3 rounded-2xl shadow-md max-w-xs break-words relative ${isSender ? "bg-gradient-to-r from-[#dcf8c6] to-[#b2f2bb]" : "bg-white dark:bg-pink-400"}`}>
                         <p className="text-sm leading-snug">{msg.text}</p>
                         <p className="text-[10px] text-white mt-1 text-right">
                           {new Date(msg.timespan).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -266,7 +266,7 @@ function Chats() {
 
             {/* Input Area */}
             <div className="p-3 bg-[#F0F0F0] flex items-center gap-3 border-t border-gray-300">
-              <button className="text-xl text-gray-600 hover:text-green-600"><Smile size={22}/></button>
+              <button className="text-xl text-white hover:text-green-600"><Smile size={22} /></button>
               <input
                 type="text"
                 value={messages}
@@ -275,13 +275,13 @@ function Chats() {
                 className="flex-1 p-2 rounded-full border border-gray-300 focus:outline-none text-sm bg-white"
               />
               <button className="bg-[#25D366] hover:bg-[#20b358] text-white px-4 py-2 rounded-full shadow-md" onClick={onhandelsubmit}>
-                <Send size={20}/>
+                <Send size={20} />
               </button>
             </div>
           </>
         ) : (
           <div className="flex flex-col items-center justify-center flex-1 text-gray-500 bg-[#f0f2f5]">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo" className="w-20 h-20 mb-4 opacity-60"/>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo" className="w-20 h-20 mb-4 opacity-60" />
             <h2 className="text-2xl font-semibold mb-2 text-gray-700">WhatsApp Web</h2>
             <p className="text-gray-500 text-sm">Send and receive messages without keeping your phone online.</p>
           </div>
